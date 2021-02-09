@@ -1,33 +1,3 @@
-db.empleado.aggregate([
-    {$lookup:
-        {
-            from:"Departamento",
-            localField:"departamento",
-            foreignField:"id",
-            as:"númeroDepartamento"
-        }
-    },
-    {$project:
-        {
-            _id:0,
-            nombre_empleado:"$nombre",
-            nombre_departamento:{$arrayElemAt:["$númeroDepartamento.nombre",0]},
-            horas_trabajadas:"$horas",
-            sueldo_por_hora:{$arrayElemAt:["$númeroDepartamento.salarioPorHora",0]}
-        }
-    },
-    {$set:
-        {
-            sueldo_total:{$multiply:["$horas_trabajadas","$sueldo_por_hora"]}
-        }
-    },
-    {$sort:
-        {
-            nombre_departamento:1, nombre_empleado:1
-        }
-    }
-]).pretty()
-
 db.ventas.aggregate([
     {
         $group:{
